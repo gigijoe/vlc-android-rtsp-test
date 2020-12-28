@@ -39,17 +39,25 @@
             tools:layout_editor_absoluteX="151dp"
             tools:layout_editor_absoluteY="120dp" />
 
-        <Button
-            android:id="@+id/buttonBaseA"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Base A" />
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
 
-        <Button
-            android:id="@+id/buttonBaseB"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Base B" />
+            <Button
+                android:id="@+id/buttonBaseA"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Base A" />
+
+            <Button
+                android:id="@+id/buttonBaseB"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="2"
+                android:text="Base B" />
+        </LinearLayout>
 
     </LinearLayout>
 
