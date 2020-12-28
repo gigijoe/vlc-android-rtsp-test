@@ -31,11 +31,6 @@ public class VideoActivity  extends Activity implements IVLCVout.Callback    {
     // media player
     private LibVLC libvlc;
     private MediaPlayer mMediaPlayer = null;
-    private int mVideoWidth;
-    private int mVideoHeight;
-    private final static int VideoSizeChanged = -1;
-
-
     private MediaPlayer.EventListener mPlayerListener = new MyPlayerListener(this);
 
     private String rtspUrl;
@@ -55,14 +50,16 @@ public class VideoActivity  extends Activity implements IVLCVout.Callback    {
         //holder.addCallback(this);
 
         ArrayList<String> options = new ArrayList<String>();
-        options.add("--aout=opensles");
-        options.add("--audio-time-stretch"); // time stretching
+        //options.add("--aout=opensles");
+        //options.add("--audio-time-stretch"); // time stretching
         options.add("-vvv"); // verbosity
-        options.add("--aout=opensles");
-        options.add("--avcodec-codec=h264");
-        options.add("--file-logging");
-        options.add("--logfile=vlc-log.txt");
-
+        //options.add("--aout=opensles");
+        //options.add("--avcodec-codec=hevc");
+        //options.add("--file-logging");
+        //options.add("--logfile=vlc-log.txt");
+        options.add("--log-verbose");
+        //options.add("--rtsp-tcp");
+        options.add("--rtsp-timeout=600"); //  Timeout in 10 minutes.
 
         libvlc = new LibVLC(getApplicationContext(), options);
         holder.setKeepScreenOn(true);
@@ -79,13 +76,14 @@ public class VideoActivity  extends Activity implements IVLCVout.Callback    {
         vout.attachViews();
 
         Media m = new Media(libvlc, Uri.parse(rtspUrl));
+        m.setHWDecoderEnabled(true, false);
+//        m.addOption(":network-caching=150");
+//        m.addOption(":clock-jitter=0");
+//        m.addOption(":clock-synchro=0");
 
         mMediaPlayer.setMedia(m);
         mMediaPlayer.play();
-
     }
-
-
 
     @Override
     protected void onResume() {
@@ -107,7 +105,7 @@ public class VideoActivity  extends Activity implements IVLCVout.Callback    {
 
     @Override
     public void onSurfacesCreated(IVLCVout vlcVout) {
-
+        vlcVout.setWindowSize(mSurface.getWidth(), mSurface.getHeight());
     }
 
     @Override
@@ -115,13 +113,10 @@ public class VideoActivity  extends Activity implements IVLCVout.Callback    {
 
     }
 
-
-
     @Override
     public void onPointerCaptureChanged(boolean hasCapture) {
 
     }
-
 
     public void releasePlayer() {
         if (libvlc == null)
@@ -133,11 +128,6 @@ public class VideoActivity  extends Activity implements IVLCVout.Callback    {
         holder = null;
         libvlc.release();
         libvlc = null;
-
-        mVideoWidth = 0;
-        mVideoHeight = 0;
     }
-
-
-
 }
+
